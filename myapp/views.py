@@ -1,21 +1,38 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
+from .models import *
 
-menu = []
+menu = [{'title': 'Рецепты', 'url': 'all_recipes'},
+        {'title': 'Добавить рецепт', 'url': 'add_recipe'}]
 
 
 def index(request):
     """Отображает страницу-приветствие проекта"""
-    return HttpResponse('<h1>Вот он я - ПОВАРЁНОК - мой новый сайт с рецептами вкусняшек для меня и моих друзей.</h1>')
-    # return render(request, template_name='index.html')
+    context = {'menu': menu, 'title': 'ПОВАРЁНОК'}
+    return render(request, 'myapp/index.html', context)
 
 
 def recipes(request):
-    return HttpResponse(f'<h1>Рецепты</h1>')
+    recipes = Recipe.objects.all()
+    context = {'menu': menu, 'title': 'ПОВАРЁНОК', 'recipes': recipes}
+    return render(request, 'myapp/recipe_list.html', context)
+    # return HttpResponse(f'<h1>Рецепты</h1>')
 
 
 def recipe_by_id(request, recipe_id):
     return HttpResponse(f'<h1>Рецепты</h1><p>{recipe_id}</p>')
+
+
+def add_recipe(request):
+    return HttpResponse(f'<h1>Добавить рецепт</h1>')
+
+
+def register(request):
+    return HttpResponse(f'<h1>Регистрация</h1>')
+
+
+def login(request):
+    return HttpResponse(f'<h1>Авторизация</h1>')
 
 
 def page_not_found(request, exception):

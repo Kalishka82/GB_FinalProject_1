@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
 from .forms import *
 from .models import *
@@ -32,7 +34,7 @@ def recipe_by_id(request, recipe_id):
 
 def add_recipe(request):
     if request.method == 'POST':
-        form = AddRecipeForm(request.POST)
+        form = AddRecipeForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 form.save()
@@ -56,3 +58,13 @@ def login(request):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f'<h1>Страница не найдена</h1>')
+
+
+class RegisterUser(CreateView):
+    form_class = UserCreationForm
+    template_name = 'myapp/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return dict(list(context.items()))

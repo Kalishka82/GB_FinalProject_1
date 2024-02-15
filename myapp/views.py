@@ -9,14 +9,15 @@ menu = [{'title': 'Рецепты', 'url': 'all_recipes'},
 def index(request):
     """Отображает страницу-приветствие проекта"""
     context = {'menu': menu, 'title': 'ПОВАРЁНОК'}
+
     return render(request, 'myapp/index.html', context)
 
 
-def recipes(request):
+def all_recipes(request):
     recipes = Recipe.objects.all()
     context = {'menu': menu, 'title': 'ПОВАРЁНОК', 'recipes': recipes}
+
     return render(request, 'myapp/recipe_list.html', context)
-    # return HttpResponse(f'<h1>Рецепты</h1>')
 
 
 def recipe_by_id(request, recipe_id):

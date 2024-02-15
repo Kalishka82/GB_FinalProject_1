@@ -7,9 +7,8 @@
 {% block content %}
 <h1>{{title}}</h1>>
     <ul>
-        {% for item in object_list %}
+        {% for item in recipes %}
         <li>
-            <div> <p> Автор: {{item.author}}</p> </div>
                 {% if item.image %}
                      <p><img src="{{ item.image.url }}"></p>
                 {% endif %}

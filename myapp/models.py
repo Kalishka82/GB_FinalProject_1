@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 
 # class User(AbstractUser):
@@ -29,6 +30,9 @@ class Recipe(models.Model):
     cooking_time = models.PositiveIntegerField(validators=[MinValueValidator(1, message='min value = 1')])
     ingredients = models.ManyToManyField(Ingredient, through='IngredientInRecipe',
                                          through_fields=('recipe', 'ingredient'),)
+
+    # def get_absolute_url(self):
+    #     return reverse('recipe', kwargs={'resipe_id': self.pk})
 
     def __str__(self):
         return self.title

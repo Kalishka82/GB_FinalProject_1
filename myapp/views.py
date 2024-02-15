@@ -1,3 +1,6 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -48,14 +51,6 @@ def add_recipe(request):
     return render(request, 'myapp/addrecipe.html', context)
 
 
-def register(request):
-    return HttpResponse(f'<h1>Регистрация</h1>')
-
-
-def login(request):
-    return HttpResponse(f'<h1>Авторизация</h1>')
-
-
 def page_not_found(request, exception):
     return HttpResponseNotFound(f'<h1>Страница не найдена</h1>')
 
@@ -68,3 +63,25 @@ class RegisterUser(CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         return dict(list(context.items()))
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class LoginUser(LoginView):
+    form_class = AuthenticationForm
+    template_name = 'myapp/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return dict(list(context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')

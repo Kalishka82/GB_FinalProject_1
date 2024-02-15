@@ -24,15 +24,11 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(unique=True, max_length=100)
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, null=True,)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='recipes/')
     cooking_time = models.PositiveIntegerField(validators=[MinValueValidator(1, message='min value = 1')])
     ingredients = models.ManyToManyField(Ingredient, through='IngredientInRecipe',
                                          through_fields=('recipe', 'ingredient'),)
-
-    # def get_absolute_url(self):
-    #     return reverse('recipe', kwargs={'resipe_id': self.pk})
 
     def __str__(self):
         return self.title

@@ -9,10 +9,10 @@
     <ul>
         {% for item in recipes %}
         <li>
+                <h3><a href="{{ item.id }}">{{item.title}}</a></h3>
                 {% if item.image %}
                      <p><img src="{{ item.image.url }}"></p>
                 {% endif %}
-                <h3><a href="{{ item.id }}">{{item.title}}</a></h3>
                 <p>{{item.description|linebreaks|truncatewords:50}}</p>
         </li>>
         {% endfor %}

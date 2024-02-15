@@ -7,9 +7,10 @@ from .models import *
 
 class AddRecipeForm(forms.ModelForm):
     """ Форма добавления рецепта. """
+
     class Meta:
         model = Recipe
-        fields = ['title', 'author', 'description', 'image', 'cooking_time']
+        fields = ['title', 'description', 'cooking_time']
 
 
 class RegisterUserForm(UserCreationForm):

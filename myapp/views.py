@@ -1,9 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from .forms import *
 from .models import *
 
-menu = [{'title': 'Рецепты', 'url': 'all_recipes'},
-        {'title': 'Добавить рецепт', 'url': 'add_recipe'}]
+menu = [{'title': 'Вкусняшки', 'url': 'all_recipes'},
+        {'title': 'Добавить вкусняшку', 'url': 'add_recipe'}]
 
 
 def index(request):
@@ -15,17 +17,33 @@ def index(request):
 
 def all_recipes(request):
     recipes = Recipe.objects.all()
-    context = {'menu': menu, 'title': 'ПОВАРЁНОК', 'recipes': recipes}
+    context = {'menu': menu, 'title': 'ВКУСНЯШКИ', 'recipes': recipes}
 
     return render(request, 'myapp/recipe_list.html', context)
 
 
 def recipe_by_id(request, recipe_id):
-    return HttpResponse(f'<h1>Рецепты</h1><p>{recipe_id}</p>')
+    recipe = Recipe.objects.get(id=recipe_id)
+    ingredients = IngredientInRecipe.objects.filter(recipe_id=recipe_id)
+    context = {'menu': menu, 'title': {recipe_id}, 'recipe': recipe, 'ingredients': ingredients}
+
+    return render(request, 'myapp/recipe.html', context)
 
 
 def add_recipe(request):
-    return HttpResponse(f'<h1>Добавить рецепт</h1>')
+    if request.method == 'POST':
+        form = AddRecipeForm(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('index')
+            except:
+                form.add_error(None, 'Ошибка добавления вкусняшки')
+    else:
+        form = AddRecipeForm()
+    context = {'menu': menu, 'title': 'Добавление вкусняшки', 'form': form}
+
+    return render(request, 'myapp/addrecipe.html', context)
 
 
 def register(request):

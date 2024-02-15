@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<h1>{{title}}</h1>>
+    <ul>
+        {% for item in object_list %}
+        <li>
+            <div> <p> Автор: {{item.author}}</p> </div>
+                {% if item.image %}
+                     <p><img src="{{ item.image.url }}"></p>
+                {% endif %}
+                <h3><a href="{{ item.id }}">{{item.title}}</a></h3>
+                <p>{{item.description|linebreaks|truncatewords:50}}</p>
+        </li>>
+        {% endfor %}
+    </ul>>
+
+{% endblock %}

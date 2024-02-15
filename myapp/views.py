@@ -1,6 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
+menu = []
+
 
 def index(request):
     """Отображает страницу-приветствие проекта"""
